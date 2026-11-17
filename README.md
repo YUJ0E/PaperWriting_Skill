@@ -7,8 +7,8 @@ Install: copy this folder to `~/.claude/skills/paper_writing`. The sub-skills `p
 
 ## Credits
 
-- Core writing rules (§0, §2 of `SKILL.md`): [Yuhang Zhang](https://yuhangzhang.com/)
 - Base skill: [JIAjindou/paper-writing](https://github.com/JIAjindou/paper-writing)
+- [Yuhang Zhang](https://yuhangzhang.com/)
 - [Imbad0202/academic-research-skills](https://github.com/Imbad0202/academic-research-skills)
 - [Orchestra-Research/AI-Research-SKILLs](https://github.com/Orchestra-Research/AI-Research-SKILLs)
 - [Master-cai/Research-Paper-Writing-Skills](https://github.com/Master-cai/Research-Paper-Writing-Skills)
