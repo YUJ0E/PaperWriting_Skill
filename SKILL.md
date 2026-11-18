@@ -31,7 +31,13 @@ You draft, they cut. Default to fewer words.
   then **commit and push right after each edit**, then verify with `git fetch && git status -sb`
   (a silent push failure happened once because Overleaf had diverged; rebase onto `origin/main` and push again).
   Never print tokens. Never commit a local CLAUDE.md.
-- Local LaTeX usually cannot compile the template. Ask the user to compile on Overleaf; check `\cite` keys by grep.
+- **Compile locally first.** TeX Live is installed (pdflatex, xelatex, lualatex, latexmk, bibtex, biber).
+  After each edit, run `latexmk -pdf -interaction=nonstopmode <main>.tex` (or `-xelatex` if the template needs it)
+  in the paper folder. Fix errors, undefined references, and undefined citations that the edit caused.
+  Keep build files out of git (`.aux`, `.log`, `.fls`, `.fdb_latexmk`, `.bbl`, `.blg`, `.out`, and the PDF
+  unless the repo already tracks it). If a package is missing, tell the user the apt package to install
+  (Debian `tlmgr` usually cannot install). Only if local compilation fails for reasons outside the edit,
+  ask the user to compile on Overleaf. Also check `\cite` keys by grep.
 - The user annotates in Chinese directly in the .tex on Overleaf. Revise per the note, then delete the note.
 - Numbers come from the experiment logs/results files only. Never invent a number. Missing results become `\TODO{}`.
 - When the user reverses a decision, apply it without arguing; if a choice is ambiguous, pick one and say so.
@@ -55,9 +61,10 @@ You draft, they cut. Default to fewer words.
    compound sentences that chain clauses with "and", "while", "which". Split them.
 4. **No orphan words at paragraph end.** The last line of a paragraph must not hold only one or two words.
    Fix it by deleting one or two words in that paragraph (a filler word, a redundant modifier, "the" before a
-   plural, "in order to" → "to"). Do **not** rewrite the paragraph. If a compiled PDF is available, check last
-   lines with `pdftotext -layout`; otherwise ask the user to report orphans after compiling, or flag paragraphs
-   whose length looks risky.
+   plural, "in order to" → "to"). Do **not** rewrite the paragraph. After compiling, run
+   `python3 ~/.claude/skills/paper_writing/assets/check_orphans.py <main>.pdf`. It lists paragraph-ending lines
+   with one or two words. It is a heuristic, so confirm each hit in the PDF text before editing, then recompile
+   and run it again. Fix orphans in the paragraphs you edited. Report others to the user instead of changing them.
 5. **Concrete numbers for key results.** In the abstract, intro results paragraph, and results analysis, state
    standout results as numbers, never as "outperforms remarkably" or "significantly better". Always separate
    absolute from relative change:
@@ -228,7 +235,8 @@ The promo film has its own skill in `video/SKILL.md` (`~/.claude/skills/promo-vi
 - [ ] Active voice; prior work in past tense, our work in present tense.
 - [ ] Standout results stated as numbers, absolute vs relative made explicit.
 - [ ] No colons, no semicolons, no flagged vague words (`references/word-choice.md`).
-- [ ] No orphan word on the last line (fix by deleting one or two words, not by rewriting).
+- [ ] Compiles locally without new errors or undefined references.
+- [ ] `check_orphans.py` shows no orphan in the edited paragraphs (fixed by deleting one or two words).
 - [ ] Every claim maps to evidence; unverified reasons are hedged.
 
 ## 10. Iterating on this skill
